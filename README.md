@@ -1,0 +1,1 @@
+ERD = https://drawsql.app/teams/webefo/diagrams/gearup/embed
