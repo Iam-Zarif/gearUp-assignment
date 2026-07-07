@@ -7,9 +7,11 @@ import notFound from "./app/middlewares/notFound";
 
 const app: Application = express();
 
+const allowedOrigins = [process.env.FRONTEND_URL || "http://localhost:3000"];
+
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: allowedOrigins,
     credentials: true,
   })
 );

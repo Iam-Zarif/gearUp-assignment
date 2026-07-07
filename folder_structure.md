@@ -1,5 +1,8 @@
-4.1 Folder Structure
 
+## 4.1 Project Structure
+
+```bash
+.
 Root
 ├── prisma
 │   ├── schema
@@ -97,5 +100,4 @@ Root
 │   └── server.ts
 └── tsconfig.json
 └── package.json
-
 

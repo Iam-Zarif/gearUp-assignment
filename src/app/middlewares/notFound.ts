@@ -4,10 +4,12 @@ const notFound: RequestHandler = (req, res) => {
   res.status(404).json({
     success: false,
     message: "API Not Found",
-    errorDetails: {
-      path: req.originalUrl,
-      method: req.method,
-    },
+    errorDetails: [
+      {
+        path: req.originalUrl,
+        message: `Cannot ${req.method} ${req.originalUrl}`,
+      },
+    ],
   });
 };
 
