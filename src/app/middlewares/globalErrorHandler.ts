@@ -3,12 +3,12 @@ import { ZodError } from "zod";
 import AppError from "../errors/AppError";
 import { TErrorSource } from "../interfaces/error";
 
-const globalErrorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
+const globalErrorHandler: ErrorRequestHandler = (error, req, res, _next) => {
   let statusCode = 500;
   let message = "Something went wrong";
   let errorDetails: TErrorSource[] = [
     {
-      path: "",
+      path: req.originalUrl,
       message: error?.message || "Something went wrong",
     },
   ];
@@ -27,7 +27,7 @@ const globalErrorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
 
     errorDetails = [
       {
-        path: "",
+        path: req.originalUrl,
         message: error.message,
       },
     ];
@@ -36,7 +36,7 @@ const globalErrorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
 
     errorDetails = [
       {
-        path: "",
+        path: req.originalUrl,
         message: error.message,
       },
     ];

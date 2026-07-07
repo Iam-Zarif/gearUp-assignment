@@ -1,0 +1,28 @@
+import { Router } from "express";
+import { UserRole } from "../../../generated/prisma/client";
+import auth from "../../middlewares/auth";
+import validateRequest from "../../middlewares/validateRequest";
+import { AuthController } from "./controller";
+import { AuthValidation } from "./validation";
+
+const router = Router();
+
+router.post(
+  "/register",
+  validateRequest(AuthValidation.registerValidationSchema),
+  AuthController.registerUser
+);
+
+router.post(
+  "/login",
+  validateRequest(AuthValidation.loginValidationSchema),
+  AuthController.loginUser
+);
+
+router.get(
+  "/me",
+  auth(UserRole.CUSTOMER, UserRole.PROVIDER, UserRole.ADMIN),
+  AuthController.getMe
+);
+
+export const AuthRoutes = router;
