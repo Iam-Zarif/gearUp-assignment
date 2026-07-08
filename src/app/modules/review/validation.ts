@@ -14,6 +14,20 @@ const createReviewValidationSchema = z.object({
   }),
 });
 
+
+const updateReviewValidationSchema = z.object({
+  body: z.object({
+    rating: z
+      .number()
+      .int("Rating must be an integer")
+      .min(MIN_REVIEW_RATING, "Rating must be at least 1")
+      .max(MAX_REVIEW_RATING, "Rating cannot be more than 5")
+      .optional(),
+    comment: z.string().optional(),
+  }),
+});
+
 export const ReviewValidation = {
   createReviewValidationSchema,
+  updateReviewValidationSchema
 };

@@ -1,7 +1,7 @@
-import { RentalStatus } from "../../../generated/prisma/client";
+import { RentalStatus, UserRole } from "../../../generated/prisma/client";
 import AppError from "../../errors/AppError";
 import { prisma } from "../../helpers/prisma";
-import { TCreateReviewPayload } from "./interface";
+import { TCreateReviewPayload, TUpdateReviewPayload } from "./interface";
 
 const reviewIncludeOptions = {
   customer: {
@@ -21,7 +21,7 @@ const reviewIncludeOptions = {
 
 const createReview = async (
   customerId: string,
-  payload: TCreateReviewPayload
+  payload: TCreateReviewPayload,
 ) => {
   const rentalOrder = await prisma.rentalOrder.findUnique({
     where: {
@@ -45,7 +45,7 @@ const createReview = async (
   }
 
   const isGearInRentalOrder = rentalOrder.items.some(
-    (item) => item.gearItemId === payload.gearItemId
+    (item) => item.gearItemId === payload.gearItemId,
   );
 
   if (!isGearInRentalOrder) {
@@ -80,6 +80,93 @@ const createReview = async (
   return result;
 };
 
+const getAllReviews = async (gearItemId?: string) => {
+  const result = await prisma.review.findMany({
+    where: {
+      ...(gearItemId && { gearItemId }),
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: reviewIncludeOptions,
+  });
+
+  return result;
+};
+
+const getSingleReview = async (id: string) => {
+  const result = await prisma.review.findUnique({
+    where: {
+      id,
+    },
+    include: reviewIncludeOptions,
+  });
+
+  if (!result) {
+    throw new AppError(404, "Review not found");
+  }
+
+  return result;
+};
+
+const updateReview = async (
+  id: string,
+  customerId: string,
+  payload: TUpdateReviewPayload,
+) => {
+  const review = await prisma.review.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!review) {
+    throw new AppError(404, "Review not found");
+  }
+
+  if (review.customerId !== customerId) {
+    throw new AppError(403, "You can update only your own review");
+  }
+
+  const result = await prisma.review.update({
+    where: {
+      id,
+    },
+    data: payload,
+    include: reviewIncludeOptions,
+  });
+
+  return result;
+};
+
+const deleteReview = async (id: string, userId: string, role: UserRole) => {
+  const review = await prisma.review.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!review) {
+    throw new AppError(404, "Review not found");
+  }
+
+  if (role !== UserRole.ADMIN && review.customerId !== userId) {
+    throw new AppError(403, "You can delete only your own review");
+  }
+
+  const result = await prisma.review.delete({
+    where: {
+      id,
+    },
+  });
+
+  return result;
+};
+
 export const ReviewServices = {
   createReview,
+  getSingleReview,
+  updateReview,
+  deleteReview,
+  getAllReviews,
 };
