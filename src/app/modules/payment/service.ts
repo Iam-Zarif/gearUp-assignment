@@ -68,6 +68,7 @@ const createPaymentSession = async (
       provider: PaymentProvider.STRIPE,
       method: STRIPE_PAYMENT_METHOD,
       status: PaymentStatus.PENDING,
+      paidAt: null,
     },
     create: {
       rentalOrderId: rentalOrder.id,
@@ -114,11 +115,11 @@ const confirmPayment = async (
   );
 
   if (payment.status === PaymentStatus.COMPLETED) {
-    return PaymentUtils.getCompletedPayment(payment.id);
+    return PaymentUtils.getPaymentDetails(payment.id);
   }
 
   if (session.payment_status !== "paid") {
-    return PaymentUtils.markPaymentAsFailed(payment.id);
+    return PaymentUtils.getPaymentDetails(payment.id);
   }
 
   const result = await PaymentUtils.markPaymentAsCompleted(
@@ -178,15 +179,11 @@ const handleSuccessPayment = async (sessionId: string) => {
   }
 
   if (payment.status === PaymentStatus.COMPLETED) {
-    return PaymentUtils.getCompletedPayment(payment.id);
+    return PaymentUtils.getPaymentDetails(payment.id);
   }
 
   if (session.payment_status !== "paid") {
-    return {
-      success: false,
-      message: "Payment not completed yet",
-      sessionId,
-    };
+    return PaymentUtils.getPaymentDetails(payment.id);
   }
 
   const result = await PaymentUtils.markPaymentAsCompleted(

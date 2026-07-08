@@ -37,14 +37,17 @@ const validatePaymentOwnership = (
   }
 };
 
-const validateRentalOrderForPayment = (rentalOrder: {
-  customerId: string;
-  status: RentalStatus;
-  totalAmount: Prisma.Decimal;
-  payment: {
-    status: PaymentStatus;
-  } | null;
-}, customerId: string) => {
+const validateRentalOrderForPayment = (
+  rentalOrder: {
+    customerId: string;
+    status: RentalStatus;
+    totalAmount: Prisma.Decimal;
+    payment: {
+      status: PaymentStatus;
+    } | null;
+  },
+  customerId: string
+) => {
   if (rentalOrder.customerId !== customerId) {
     throw new AppError(403, "You can pay only for your own rental order");
   }
@@ -97,21 +100,7 @@ const markPaymentAsCompleted = async (
   return result;
 };
 
-const markPaymentAsFailed = async (paymentId: string) => {
-  const result = await prisma.payment.update({
-    where: {
-      id: paymentId,
-    },
-    data: {
-      status: PaymentStatus.FAILED,
-    },
-    include: paymentIncludeOptions,
-  });
-
-  return result;
-};
-
-const getCompletedPayment = async (paymentId: string) => {
+const getPaymentDetails = async (paymentId: string) => {
   const result = await prisma.payment.findUnique({
     where: {
       id: paymentId,
@@ -126,6 +115,5 @@ export const PaymentUtils = {
   validatePaymentOwnership,
   validateRentalOrderForPayment,
   markPaymentAsCompleted,
-  markPaymentAsFailed,
-  getCompletedPayment,
+  getPaymentDetails,
 };
