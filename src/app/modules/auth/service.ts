@@ -5,7 +5,7 @@ import AppError from "../../errors/AppError";
 import { jwtHelpers } from "../../helpers/jwtHelpers";
 import { prisma } from "../../helpers/prisma";
 import excludeField from "../../utils/excludeField";
-import { TLoginPayload, TRegisterPayload } from "./interface";
+import { TLoginPayload, TRegisterPayload, TUpdateProfilePayload } from "./interface";
 
 
 
@@ -94,8 +94,37 @@ const getMe = async (userId: string) => {
   return excludeField(user, ["password"]);
 };
 
+const updateProfile = async (
+  userId: string,
+  payload: TUpdateProfilePayload
+) => {
+  if (Object.keys(payload).length === 0) {
+    throw new AppError(400, "No profile data provided to update");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (!user) {
+    throw new AppError(404, "User not found");
+  }
+
+  const updatedUser = await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: payload,
+  });
+
+  return excludeField(updatedUser, ["password"]);
+};
+
 export const AuthServices = {
   registerUser,
   loginUser,
   getMe,
+  updateProfile
 };

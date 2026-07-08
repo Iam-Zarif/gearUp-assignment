@@ -14,3 +14,10 @@ export type TLoginPayload = {
   email: string;
   password: string;
 };
+
+export type TUpdateProfilePayload = {
+  name?: string;
+  phone?: string;
+  address?: string;
+  profilePhoto?: string;
+};

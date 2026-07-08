@@ -8,6 +8,7 @@ import { ReviewRoutes } from "../modules/review/route";
 import { HealthRoutes } from "./health";
 import { AdminRoutes } from "../modules/admin/route";
 
+
 const router = Router();
 
 router.use("/health", HealthRoutes);
@@ -20,5 +21,6 @@ router.use("/provider/orders", ProviderOrderRoutes);
 router.use("/payments", PaymentRoutes);
 router.use("/reviews", ReviewRoutes);
 router.use("/admin", AdminRoutes);
+
 
 export default router;
