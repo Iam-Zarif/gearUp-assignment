@@ -5,21 +5,9 @@ import AppError from "../../errors/AppError";
 import { jwtHelpers } from "../../helpers/jwtHelpers";
 import { prisma } from "../../helpers/prisma";
 import excludeField from "../../utils/excludeField";
+import { TLoginPayload, TRegisterPayload } from "./interface";
 
-type TRegisterPayload = {
-  name: string;
-  email: string;
-  password: string;
-  phone?: string;
-  address?: string;
-  profilePhoto?: string;
-  role: Exclude<UserRole, "ADMIN">;
-};
 
-type TLoginPayload = {
-  email: string;
-  password: string;
-};
 
 const registerUser = async (payload: TRegisterPayload) => {
   const existingUser = await prisma.user.findUnique({

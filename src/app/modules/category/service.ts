@@ -1,10 +1,8 @@
 import AppError from "../../errors/AppError";
 import { prisma } from "../../helpers/prisma";
+import { TCategoryPayload } from "./interface";
 
-type TCategoryPayload = {
-  name: string;
-  description?: string;
-};
+
 
 const createCategory = async (payload: TCategoryPayload) => {
   const existingCategory = await prisma.category.findUnique({
