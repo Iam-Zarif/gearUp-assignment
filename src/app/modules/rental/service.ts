@@ -1,7 +1,7 @@
 import { prisma } from "../../helpers/prisma";
 import AppError from "../../errors/AppError";
 import { TCreateRentalPayload, TUpdateRentalStatusPayload } from "./interface";
-import { rentalIncludeOptions, RentalUtils } from "./utlis";
+import { rentalIncludeOptions, RentalUtils } from "./utils";
 
 
 const createRental = async (
