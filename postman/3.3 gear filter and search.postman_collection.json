@@ -1,0 +1,176 @@
+{
+  "info": {
+    "_postman_id": "f7260bd4-b1bd-45b5-92e0-366ae70f30bb",
+    "name": "3.3 gear filter and search",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "29355440",
+    "_collection_link": "https://go.postman.co/collection/29355440-f7260bd4-b1bd-45b5-92e0-366ae70f30bb?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "search by keyword",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{liveApi}}/api/gear?searchTerm=dumbbell",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "gear"
+          ],
+          "query": [
+            {
+              "key": "searchTerm",
+              "value": "dumbbell"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "filter by brand",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{liveApi}}/api/gear?brand=Bowflex",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "gear"
+          ],
+          "query": [
+            {
+              "key": "brand",
+              "value": "Bowflex"
+            }
+          ]
+        },
+        "description": "Generated from cURL: curl --request GET --url '{{liveApi}}/api/gear?brand=Bowflex'"
+      },
+      "response": []
+    },
+    {
+      "name": "filter by category",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{liveApi}}/api/gear?category=Fitness",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "gear"
+          ],
+          "query": [
+            {
+              "key": "category",
+              "value": "Fitness"
+            }
+          ]
+        },
+        "description": "Generated from cURL: curl --request GET --url '{{liveApi}}/api/gear?category=Fitness'"
+      },
+      "response": []
+    },
+    {
+      "name": "filter by price range",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{liveApi}}/api/gear?minPrice=100&maxPrice=500",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "gear"
+          ],
+          "query": [
+            {
+              "key": "minPrice",
+              "value": "100"
+            },
+            {
+              "key": "maxPrice",
+              "value": "500"
+            }
+          ]
+        },
+        "description": "Generated from cURL: curl --request GET --url '{{liveApi}}/api/gear?minPrice=100&maxPrice=500'"
+      },
+      "response": []
+    },
+    {
+      "name": "filter by availability",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{liveApi}}/api/gear?availability=available",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "gear"
+          ],
+          "query": [
+            {
+              "key": "availability",
+              "value": "available"
+            }
+          ]
+        },
+        "description": "Generated from cURL: curl --request GET --url '{{liveApi}}/api/gear?availability=available'"
+      },
+      "response": []
+    },
+    {
+      "name": "pagination and sorting",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{liveApi}}/api/gear?page=1&limit=5&sortBy=pricePerDay&sortOrder=asc",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "gear"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "limit",
+              "value": "5"
+            },
+            {
+              "key": "sortBy",
+              "value": "pricePerDay"
+            },
+            {
+              "key": "sortOrder",
+              "value": "asc"
+            }
+          ]
+        },
+        "description": "Generated from cURL: curl --request GET --url '{{liveApi}}/api/gear?page=1&limit=5&sortBy=pricePerDay&sortOrder=asc'"
+      },
+      "response": []
+    }
+  ]
+}

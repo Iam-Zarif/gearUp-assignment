@@ -1,0 +1,129 @@
+{
+  "info": {
+    "_postman_id": "e9cc2006-63ac-4496-8ed6-8c9bff838b86",
+    "name": "4. rental",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "29355440",
+    "_collection_link": "https://go.postman.co/collection/29355440-e9cc2006-63ac-4496-8ed6-8c9bff838b86?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "create rental order",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json?.data?.id) pm.environment.set('rentalOrderId', json.data.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CustomerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"startDate\": \"2026-07-10\",\n  \"endDate\": \"2026-07-12\",\n  \"items\": [\n    {\n      \"gearItemId\": \"7dc04b18-1bc3-4fe5-9d37-2d8ded269f0a\",\n      \"quantity\": 1\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{liveApi}}/api/rentals",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "rentals"
+          ]
+        },
+        "description": "Generated from cURL: curl --request POST --url '{{liveApi}}/api/rentals'"
+      },
+      "response": []
+    },
+    {
+      "name": "get rental history",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CustomerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{liveApi}}/api/rentals",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "rentals"
+          ]
+        },
+        "description": "Generated from cURL: curl --request GET --url '{{liveApi}}/api/rentals'"
+      },
+      "response": []
+    },
+    {
+      "name": "get rental order details",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CustomerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{liveApi}}/api/rentals/{{rentalOrderId}}",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "rentals",
+            "{{rentalOrderId}}"
+          ]
+        },
+        "description": "Generated from cURL: curl --request GET --url '{{liveApi}}/api/rentals/{{rentalOrderId}}'"
+      },
+      "response": []
+    }
+  ]
+}

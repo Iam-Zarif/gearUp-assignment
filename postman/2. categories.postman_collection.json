@@ -1,0 +1,158 @@
+{
+  "info": {
+    "_postman_id": "8861a765-5760-43c7-8d8f-5b1900d0818f",
+    "name": "2. categories",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "29355440",
+    "_collection_link": "https://go.postman.co/collection/29355440-8861a765-5760-43c7-8d8f-5b1900d0818f?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "get all categories",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{liveApi}}/api/categories",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "categories"
+          ]
+        },
+        "description": "Generated from cURL: curl --request GET --url '{{liveApi}}/api/categories'"
+      },
+      "response": []
+    },
+    {
+      "name": "create category",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json?.data?.id) pm.environment.set('categoryId', json.data.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{AdminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Adventure Travel\",\n  \"description\": \"Travel backpacks, trekking bags, portable tools, and adventure accessories\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{liveApi}}/api/categories",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "categories"
+          ]
+        },
+        "description": "Generated from cURL: curl --request POST --url '{{liveApi}}/api/categories'"
+      },
+      "response": []
+    },
+    {
+      "name": "update category",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{AdminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Cycling & Bikes\",\n  \"description\": \"Updated bicycles and cycling accessories\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{liveApi}}/api/categories/{{categoryId}}",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "categories",
+            "{{categoryId}}"
+          ]
+        },
+        "description": "Generated from cURL: curl --request PATCH --url '{{liveApi}}/api/categories/{{categoryId}}'"
+      },
+      "response": []
+    },
+    {
+      "name": "delete category",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{AdminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{liveApi}}/api/categories/{{categoryId}}",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "categories",
+            "{{categoryId}}"
+          ]
+        },
+        "description": "Generated from cURL: curl --request DELETE --url '{{liveApi}}/api/categories/{{categoryId}}'"
+      },
+      "response": []
+    }
+  ]
+}

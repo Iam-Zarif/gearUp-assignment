@@ -1,0 +1,181 @@
+{
+  "info": {
+    "_postman_id": "b24e51e5-d4a8-4e4e-aae9-b9a7accc244f",
+    "name": "3. gear",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "29355440",
+    "_collection_link": "https://go.postman.co/collection/29355440-b24e51e5-d4a8-4e4e-aae9-b9a7accc244f?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "create gear item",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json?.data?.id) pm.environment.set('gearItemId', json.data.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{ProviderToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"categoryId\": \"506093f0-d984-42a7-b271-9297bd47cee4\",\n  \"name\": \"Trekking Pole Set\",\n  \"brand\": \"TrailMaster\",\n  \"description\": \"Lightweight adjustable trekking poles for hiking and mountain trails\",\n  \"pricePerDay\": 180,\n  \"stockQuantity\": 8,\n  \"availableQuantity\": 8,\n  \"imageUrl\": \"https://example.com/trekking-poles.jpg\",\n  \"specifications\": {\n    \"material\": \"Aluminum\",\n    \"adjustableLength\": \"65cm-135cm\",\n    \"condition\": \"Good\"\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{liveApi}}/api/provider/gear",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "provider",
+            "gear"
+          ]
+        },
+        "description": "Generated from cURL: curl --request POST --url '{{liveApi}}/api/provider/gear'"
+      },
+      "response": []
+    },
+    {
+      "name": "get all gear",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{liveApi}}/api/gear",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "gear"
+          ]
+        },
+        "description": "Generated from cURL: curl --request GET --url '{{liveApi}}/api/gear'"
+      },
+      "response": []
+    },
+    {
+      "name": "get gear item details",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{liveApi}}/api/gear/{{gearItemId}}",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "gear",
+            "{{gearItemId}}"
+          ]
+        },
+        "description": "Generated from cURL: curl --request GET --url '{{liveApi}}/api/gear/{{gearItemId}}'"
+      },
+      "response": []
+    },
+    {
+      "name": "update gear item",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{ProviderToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\n  \"availableQuantity\": 4\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{liveApi}}/api/provider/gear/{{gearItemId}}",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "provider",
+            "gear",
+            "{{gearItemId}}"
+          ]
+        },
+        "description": "Generated from cURL: curl --request PUT --url '{{liveApi}}/api/provider/gear/{{gearItemId}}'"
+      },
+      "response": []
+    },
+    {
+      "name": "delete gear item",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{ProviderToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{liveApi}}/api/provider/gear/{{gearItemId}}",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "provider",
+            "gear",
+            "{{gearItemId}}"
+          ]
+        },
+        "description": "Generated from cURL: curl --request DELETE --url '{{liveApi}}/api/provider/gear/{{gearItemId}}'"
+      },
+      "response": []
+    }
+  ]
+}

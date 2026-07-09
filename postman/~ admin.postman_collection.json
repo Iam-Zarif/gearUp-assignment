@@ -1,15 +1,15 @@
 {
   "info": {
-    "name": "admin",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    "_postman_id": "298828d6-ea65-4c4b-ba0b-eafc60f56849",
+    "name": "~ admin",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "29355440",
+    "_collection_link": "https://go.postman.co/collection/29355440-298828d6-ea65-4c4b-ba0b-eafc60f56849?source=collection_link"
   },
   "item": [
     {
       "name": "get all users",
       "request": {
-        "method": "GET",
-        "header": [],
-        "url": "{{api}}/api/admin/users",
         "auth": {
           "type": "bearer",
           "bearer": [
@@ -18,6 +18,19 @@
               "value": "{{AdminToken}}",
               "type": "string"
             }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{liveApi}}/api/admin/users",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "admin",
+            "users"
           ]
         }
       },
@@ -26,9 +39,6 @@
     {
       "name": "update user status",
       "request": {
-        "method": "PATCH",
-        "header": [],
-        "url": "{{api}}/api/admin/users/{{userId}}",
         "auth": {
           "type": "bearer",
           "bearer": [
@@ -39,6 +49,8 @@
             }
           ]
         },
+        "method": "PATCH",
+        "header": [],
         "body": {
           "mode": "raw",
           "raw": "{\n  \"status\": \"SUSPENDED\"\n}",
@@ -47,6 +59,18 @@
               "language": "json"
             }
           }
+        },
+        "url": {
+          "raw": "{{liveApi}}e}}/api/admin/users/{{userId}}",
+          "host": [
+            "{{liveApi}}e}}"
+          ],
+          "path": [
+            "api",
+            "admin",
+            "users",
+            "{{userId}}"
+          ]
         }
       },
       "response": []
@@ -54,9 +78,6 @@
     {
       "name": "activate user",
       "request": {
-        "method": "PATCH",
-        "header": [],
-        "url": "{{api}}/api/admin/users/{{userId}}",
         "auth": {
           "type": "bearer",
           "bearer": [
@@ -67,6 +88,8 @@
             }
           ]
         },
+        "method": "PATCH",
+        "header": [],
         "body": {
           "mode": "raw",
           "raw": "{\n  \"status\": \"ACTIVE\"\n}",
@@ -75,6 +98,18 @@
               "language": "json"
             }
           }
+        },
+        "url": {
+          "raw": "{{liveApi}}e}}/api/admin/users/{{userId}}",
+          "host": [
+            "{{liveApi}}e}}"
+          ],
+          "path": [
+            "api",
+            "admin",
+            "users",
+            "{{userId}}"
+          ]
         }
       },
       "response": []
@@ -82,9 +117,6 @@
     {
       "name": "get all gears",
       "request": {
-        "method": "GET",
-        "header": [],
-        "url": "{{api}}/api/admin/gear",
         "auth": {
           "type": "bearer",
           "bearer": [
@@ -94,6 +126,19 @@
               "type": "string"
             }
           ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{liveApi}}/api/admin/gear",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "admin",
+            "gear"
+          ]
         }
       },
       "response": []
@@ -101,9 +146,6 @@
     {
       "name": "get all rental orders",
       "request": {
-        "method": "GET",
-        "header": [],
-        "url": "{{api}}/api/admin/rentals",
         "auth": {
           "type": "bearer",
           "bearer": [
@@ -112,6 +154,19 @@
               "value": "{{AdminToken}}",
               "type": "string"
             }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{liveApi}}e}}/api/admin/rentals",
+          "host": [
+            "{{liveApi}}e}}"
+          ],
+          "path": [
+            "api",
+            "admin",
+            "rentals"
           ]
         }
       },

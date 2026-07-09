@@ -1,0 +1,203 @@
+{
+  "info": {
+    "_postman_id": "c71a8160-f01c-4e39-8378-3c1b0af232f8",
+    "name": "7. review",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "29355440",
+    "_collection_link": "https://go.postman.co/collection/29355440-c71a8160-f01c-4e39-8378-3c1b0af232f8?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Post review",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json?.data?.id) pm.environment.set('reviewId', json.data.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CustomerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"gearItemId\": \"7dc04b18-1bc3-4fe5-9d37-2d8ded269f0a\",\n  \"rentalOrderId\": \"8653fb72-84e5-4eb5-97f5-5beed89d51d0\",\n  \"rating\": 5,\n  \"comment\": \"Great equipment, clean and easy to use.\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{liveApi}}/api/reviews",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "reviews"
+          ]
+        },
+        "description": "Generated from cURL: curl --request POST --url '{{liveApi}}/api/reviews'"
+      },
+      "response": []
+    },
+    {
+      "name": "get all reviews",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{liveApi}}/api/reviews",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "reviews"
+          ]
+        },
+        "description": "Generated from cURL: curl --request GET --url '{{liveApi}}/api/reviews'"
+      },
+      "response": []
+    },
+    {
+      "name": "reviews (based on gear item)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{liveApi}}/api/reviews?gearItemId={{gearItemId}}",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "reviews"
+          ],
+          "query": [
+            {
+              "key": "gearItemId",
+              "value": "{{gearItemId}}"
+            }
+          ]
+        },
+        "description": "Generated from cURL: curl --request GET --url '{{liveApi}}/api/reviews?gearItemId={{gearItemId}}'"
+      },
+      "response": []
+    },
+    {
+      "name": "single review detail",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{liveApi}}/api/reviews/{{reviewId}}",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "reviews",
+            "{{reviewId}}"
+          ]
+        },
+        "description": "Generated from cURL: curl --request GET --url '{{liveApi}}/api/reviews/{{reviewId}}'"
+      },
+      "response": []
+    },
+    {
+      "name": "update review",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CustomerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"rating\": 4,\n  \"comment\": \"Good equipment, but delivery could be faster.\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{liveApi}}/api/reviews/{{reviewId}}",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "reviews",
+            "{{reviewId}}"
+          ]
+        },
+        "description": "Generated from cURL: curl --request PATCH --url '{{liveApi}}/api/reviews/{{reviewId}}'"
+      },
+      "response": []
+    },
+    {
+      "name": "delete review",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CustomerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{liveApi}}/api/reviews/{{reviewId}}",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "reviews",
+            "{{reviewId}}"
+          ]
+        },
+        "description": "Generated from cURL: curl --request DELETE --url '{{liveApi}}/api/reviews/{{reviewId}}'"
+      },
+      "response": []
+    }
+  ]
+}

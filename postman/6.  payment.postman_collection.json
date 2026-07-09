@@ -1,0 +1,217 @@
+{
+  "info": {
+    "_postman_id": "4bc17e42-f7e5-4084-ac51-4372bd79e91a",
+    "name": "6.  payment",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "29355440",
+    "_collection_link": "https://go.postman.co/collection/29355440-4bc17e42-f7e5-4084-ac51-4372bd79e91a?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "create payment session",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json?.data?.sessionId) pm.environment.set('sessionId', json.data.sessionId);",
+              "if (json?.data?.payment?.id) pm.environment.set('paymentId', json.data.payment.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CustomerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"rentalOrderId\": \"8653fb72-84e5-4eb5-97f5-5beed89d51d0\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{liveApi}}/api/payments/create",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "payments",
+            "create"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "confirm payment",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CustomerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sessionId\": \"cs_test_a1fSUV1cuPHtHph363ObmHGwVlARE19ChtVDa0aj75v6mXPZJAj8912vW2\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{liveApi}}/api/payments/confirm",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "payments",
+            "confirm"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get payment history",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CustomerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{liveApi}}/api/payments",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "payments"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get payment details",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "inherit"
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{liveApi}}/api/payments/{{paymentId}}",
+          "host": [
+            "{{liveApi}}"
+          ],
+          "path": [
+            "api",
+            "payments",
+            "{{paymentId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "payment success callback",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{api}}/api/payments/success?session_id={{sessionId}}",
+          "host": [
+            "{{api}}"
+          ],
+          "path": [
+            "api",
+            "payments",
+            "success"
+          ],
+          "query": [
+            {
+              "key": "session_id",
+              "value": "{{sessionId}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "payment cancel callback",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{api}}/api/payments/cancel",
+          "host": [
+            "{{api}}"
+          ],
+          "path": [
+            "api",
+            "payments",
+            "cancel"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
