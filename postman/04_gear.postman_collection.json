@@ -1,0 +1,175 @@
+{
+  "info": {
+    "_postman_id": "6631ebaf-3fe6-46df-a199-b9d1ef4c5af6",
+    "name": "04 Gear",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "get all gear",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5001/api/gear",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5001",
+          "path": [
+            "api",
+            "gear"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get gear details",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5001/api/gear/{{gearItemId}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5001",
+          "path": [
+            "api",
+            "gear",
+            "{{gearItemId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "create gear",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:5001/api/provider/gear",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5001",
+          "path": [
+            "api",
+            "provider",
+            "gear"
+          ]
+        },
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{ProviderToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"categoryId\": \"{{categoryId}}\",\n  \"name\": \"Adjustable Dumbbell Set\",\n  \"brand\": \"Bowflex\",\n  \"description\": \"Adjustable dumbbell set for home fitness training\",\n  \"pricePerDay\": 350,\n  \"stockQuantity\": 5,\n  \"availableQuantity\": 5,\n  \"imageUrl\": \"https://example.com/dumbbell.jpg\",\n  \"specifications\": {\n    \"weightRange\": \"5kg-25kg\",\n    \"material\": \"Steel\",\n    \"condition\": \"Good\"\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "update gear",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:5001/api/provider/gear/{{gearItemId}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5001",
+          "path": [
+            "api",
+            "provider",
+            "gear",
+            "{{gearItemId}}"
+          ]
+        },
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{ProviderToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Updated Adjustable Dumbbell Set\",\n  \"pricePerDay\": 400,\n  \"availableQuantity\": 4,\n  \"status\": \"AVAILABLE\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "delete gear",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5001/api/provider/gear/{{gearItemId}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5001",
+          "path": [
+            "api",
+            "provider",
+            "gear",
+            "{{gearItemId}}"
+          ]
+        },
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{ProviderToken}}",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
