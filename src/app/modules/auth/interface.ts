@@ -17,7 +17,10 @@ export type TLoginPayload = {
 
 export type TUpdateProfilePayload = {
   name?: string;
+  email?: string;
   phone?: string;
   address?: string;
   profilePhoto?: string;
+  oldPassword?: string;
+  newPassword?: string;
 };
