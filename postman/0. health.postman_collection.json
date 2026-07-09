@@ -28,7 +28,7 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{liveApi}}e}}/api/health",
+          "raw": "{{liveApi}}/api/health",
           "host": [
             "{{liveApi}}e}}"
           ],
