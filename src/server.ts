@@ -18,7 +18,9 @@ const main = async () => {
   }
 };
 
-main();
+if (!process.env.VERCEL) {
+  main();
+}
 
 process.on("unhandledRejection", (error) => {
   console.error("Unhandled Rejection detected:", error);
@@ -47,3 +49,5 @@ process.on("SIGTERM", async () => {
     });
   }
 });
+
+export default app;

@@ -1,7 +1,6 @@
 {
   "info": {
-    "_postman_id": "3a3db5d2-bf64-431e-bc8d-a540d908fc2e",
-    "name": "02 Admin",
+    "name": "admin",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -10,19 +9,7 @@
       "request": {
         "method": "GET",
         "header": [],
-        "url": {
-          "raw": "http://localhost:5001/api/admin/users",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "admin",
-            "users"
-          ]
-        },
+        "url": "{{api}}/api/admin/users",
         "auth": {
           "type": "bearer",
           "bearer": [
@@ -40,27 +27,8 @@
       "name": "update user status",
       "request": {
         "method": "PATCH",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "http://localhost:5001/api/admin/users/{{userId}}",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "admin",
-            "users",
-            "{{userId}}"
-          ]
-        },
+        "header": [],
+        "url": "{{api}}/api/admin/users/{{userId}}",
         "auth": {
           "type": "bearer",
           "bearer": [
@@ -84,30 +52,11 @@
       "response": []
     },
     {
-      "name": "activate user status",
+      "name": "activate user",
       "request": {
         "method": "PATCH",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "http://localhost:5001/api/admin/users/{{userId}}",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "admin",
-            "users",
-            "{{userId}}"
-          ]
-        },
+        "header": [],
+        "url": "{{api}}/api/admin/users/{{userId}}",
         "auth": {
           "type": "bearer",
           "bearer": [
@@ -131,23 +80,11 @@
       "response": []
     },
     {
-      "name": "get all gear listings",
+      "name": "get all gears",
       "request": {
         "method": "GET",
         "header": [],
-        "url": {
-          "raw": "http://localhost:5001/api/admin/gear",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "admin",
-            "gear"
-          ]
-        },
+        "url": "{{api}}/api/admin/gear",
         "auth": {
           "type": "bearer",
           "bearer": [
@@ -166,19 +103,7 @@
       "request": {
         "method": "GET",
         "header": [],
-        "url": {
-          "raw": "http://localhost:5001/api/admin/rentals",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "admin",
-            "rentals"
-          ]
-        },
+        "url": "{{api}}/api/admin/rentals",
         "auth": {
           "type": "bearer",
           "bearer": [

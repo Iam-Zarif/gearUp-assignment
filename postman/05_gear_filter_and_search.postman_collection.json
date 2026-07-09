@@ -1,7 +1,6 @@
 {
   "info": {
-    "_postman_id": "d4f11ad1-f60e-4b05-8ea4-3c704e1320e2",
-    "name": "05 Gear Filter And Search",
+    "name": "gear filter and search",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -10,18 +9,7 @@
       "request": {
         "method": "GET",
         "header": [],
-        "url": {
-          "raw": "http://localhost:5001/api/gear?searchTerm=dumbbell",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "gear?searchTerm=dumbbell"
-          ]
-        }
+        "url": "{{api}}/api/gear?searchTerm=dumbbell"
       },
       "response": []
     },
@@ -30,18 +18,7 @@
       "request": {
         "method": "GET",
         "header": [],
-        "url": {
-          "raw": "http://localhost:5001/api/gear?brand=Bowflex",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "gear?brand=Bowflex"
-          ]
-        }
+        "url": "{{api}}/api/gear?brand=Bowflex"
       },
       "response": []
     },
@@ -50,38 +27,16 @@
       "request": {
         "method": "GET",
         "header": [],
-        "url": {
-          "raw": "http://localhost:5001/api/gear?category=Fitness",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "gear?category=Fitness"
-          ]
-        }
+        "url": "{{api}}/api/gear?category=Fitness"
       },
       "response": []
     },
     {
-      "name": "filter by price range",
+      "name": "filter by min and max price",
       "request": {
         "method": "GET",
         "header": [],
-        "url": {
-          "raw": "http://localhost:5001/api/gear?minPrice=100&maxPrice=500",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "gear?minPrice=100&maxPrice=500"
-          ]
-        }
+        "url": "{{api}}/api/gear?minPrice=100&maxPrice=500"
       },
       "response": []
     },
@@ -90,38 +45,16 @@
       "request": {
         "method": "GET",
         "header": [],
-        "url": {
-          "raw": "http://localhost:5001/api/gear?availability=available",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "gear?availability=available"
-          ]
-        }
+        "url": "{{api}}/api/gear?availability=available"
       },
       "response": []
     },
     {
-      "name": "pagination and sort",
+      "name": "pagination and sorting",
       "request": {
         "method": "GET",
         "header": [],
-        "url": {
-          "raw": "http://localhost:5001/api/gear?page=1&limit=5&sortBy=pricePerDay&sortOrder=asc",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "gear?page=1&limit=5&sortBy=pricePerDay&sortOrder=asc"
-          ]
-        }
+        "url": "{{api}}/api/gear?page=1&limit=5&sortBy=pricePerDay&sortOrder=asc"
       },
       "response": []
     }

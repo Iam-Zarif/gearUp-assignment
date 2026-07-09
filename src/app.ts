@@ -1,7 +1,7 @@
-import express, { Application} from "express";
+import express, { Application } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import router from "./app/routes";
+import router from "./app/routes/index";
 import globalErrorHandler from "./app/middlewares/globalErrorHandler";
 import notFound from "./app/middlewares/notFound";
 import { RootRoute } from "./app/routes/root";
@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/", RootRoute);
 app.use("/api", router);
 
-app.use(globalErrorHandler);
 app.use(notFound);
+app.use(globalErrorHandler);
 
 export default app;

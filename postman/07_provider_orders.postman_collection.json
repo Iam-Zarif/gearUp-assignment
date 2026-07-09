@@ -1,7 +1,6 @@
 {
   "info": {
-    "_postman_id": "ce3bab42-485f-40cd-9d84-08dcd3a4114c",
-    "name": "07 Provider Orders",
+    "name": "provider orders",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -10,19 +9,7 @@
       "request": {
         "method": "GET",
         "header": [],
-        "url": {
-          "raw": "http://localhost:5001/api/provider/orders",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "provider",
-            "orders"
-          ]
-        },
+        "url": "{{api}}/api/provider/orders",
         "auth": {
           "type": "bearer",
           "bearer": [
@@ -40,27 +27,8 @@
       "name": "confirm rental order",
       "request": {
         "method": "PATCH",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "http://localhost:5001/api/provider/orders/{{rentalOrderId}}",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "provider",
-            "orders",
-            "{{rentalOrderId}}"
-          ]
-        },
+        "header": [],
+        "url": "{{api}}/api/provider/orders/{{rentalOrderId}}",
         "auth": {
           "type": "bearer",
           "bearer": [
@@ -84,30 +52,11 @@
       "response": []
     },
     {
-      "name": "mark rental picked up",
+      "name": "mark order picked up",
       "request": {
         "method": "PATCH",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "http://localhost:5001/api/provider/orders/{{rentalOrderId}}",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "provider",
-            "orders",
-            "{{rentalOrderId}}"
-          ]
-        },
+        "header": [],
+        "url": "{{api}}/api/provider/orders/{{rentalOrderId}}",
         "auth": {
           "type": "bearer",
           "bearer": [
@@ -131,30 +80,11 @@
       "response": []
     },
     {
-      "name": "mark rental returned",
+      "name": "mark order returned",
       "request": {
         "method": "PATCH",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "http://localhost:5001/api/provider/orders/{{rentalOrderId}}",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "provider",
-            "orders",
-            "{{rentalOrderId}}"
-          ]
-        },
+        "header": [],
+        "url": "{{api}}/api/provider/orders/{{rentalOrderId}}",
         "auth": {
           "type": "bearer",
           "bearer": [
@@ -181,27 +111,8 @@
       "name": "cancel rental order",
       "request": {
         "method": "PATCH",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "http://localhost:5001/api/provider/orders/{{rentalOrderId}}",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "provider",
-            "orders",
-            "{{rentalOrderId}}"
-          ]
-        },
+        "header": [],
+        "url": "{{api}}/api/provider/orders/{{rentalOrderId}}",
         "auth": {
           "type": "bearer",
           "bearer": [

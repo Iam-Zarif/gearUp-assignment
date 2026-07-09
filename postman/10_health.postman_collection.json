@@ -1,7 +1,6 @@
 {
   "info": {
-    "_postman_id": "e4a3cbef-447d-4fb4-8d3b-48369261305a",
-    "name": "10 Health",
+    "name": "health",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -10,15 +9,7 @@
       "request": {
         "method": "GET",
         "header": [],
-        "url": {
-          "raw": "http://localhost:5001",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": []
-        }
+        "url": "{{api}}/"
       },
       "response": []
     },
@@ -27,18 +18,7 @@
       "request": {
         "method": "GET",
         "header": [],
-        "url": {
-          "raw": "http://localhost:5001/api/health",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "health"
-          ]
-        }
+        "url": "{{api}}/api/health"
       },
       "response": []
     }

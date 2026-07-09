@@ -1,7 +1,6 @@
 {
   "info": {
-    "_postman_id": "d1bf6282-cf6b-4a6f-93e3-03793317ee52",
-    "name": "01 Auth",
+    "name": "auth",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -9,29 +8,11 @@
       "name": "register customer",
       "request": {
         "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "http://localhost:5001/api/auth/register",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "auth",
-            "register"
-          ]
-        },
+        "header": [],
+        "url": "{{api}}/api/auth/register",
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"name\": \"Customer One\",\n  \"email\": \"customer@gearup.com\",\n  \"password\": \"123456\",\n  \"phone\": \"01700000000\",\n  \"address\": \"Dhaka\",\n  \"profilePhoto\": \"https://example.com/customer.jpg\",\n  \"role\": \"CUSTOMER\"\n}",
+          "raw": "{\n  \"name\": \"Customer One\",\n  \"email\": \"customer.new@gearup.com\",\n  \"password\": \"123456\",\n  \"phone\": \"01700000000\",\n  \"address\": \"Dhaka\",\n  \"profilePhoto\": \"https://example.com/customer.jpg\",\n  \"role\": \"CUSTOMER\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -45,101 +26,11 @@
       "name": "register provider",
       "request": {
         "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "http://localhost:5001/api/auth/register",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "auth",
-            "register"
-          ]
-        },
+        "header": [],
+        "url": "{{api}}/api/auth/register",
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"name\": \"Provider One\",\n  \"email\": \"provider@gearup.com\",\n  \"password\": \"123456\",\n  \"phone\": \"01800000000\",\n  \"address\": \"Dhaka\",\n  \"profilePhoto\": \"https://example.com/provider.jpg\",\n  \"role\": \"PROVIDER\"\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "login customer",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "http://localhost:5001/api/auth/login",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "auth",
-            "login"
-          ]
-        },
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"email\": \"customer@gearup.com\",\n  \"password\": \"123456\"\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "login provider",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "http://localhost:5001/api/auth/login",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "auth",
-            "login"
-          ]
-        },
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"email\": \"provider@gearup.com\",\n  \"password\": \"123456\"\n}",
+          "raw": "{\n  \"name\": \"Provider One\",\n  \"email\": \"provider.new@gearup.com\",\n  \"password\": \"123456\",\n  \"phone\": \"01800000000\",\n  \"address\": \"Dhaka\",\n  \"profilePhoto\": \"https://example.com/provider.jpg\",\n  \"role\": \"PROVIDER\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -153,26 +44,8 @@
       "name": "login admin",
       "request": {
         "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "http://localhost:5001/api/auth/login",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "auth",
-            "login"
-          ]
-        },
+        "header": [],
+        "url": "{{api}}/api/auth/login",
         "body": {
           "mode": "raw",
           "raw": "{\n  \"email\": \"admin@gearup.com\",\n  \"password\": \"admin123\"\n}",
@@ -183,32 +56,95 @@
           }
         }
       },
-      "response": []
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json?.data?.accessToken) pm.environment.set('AdminToken', json.data.accessToken);",
+              "if (json?.data?.user?.id) pm.environment.set('userId', json.data.user.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "login provider",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{api}}/api/auth/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"provider@gearup.com\",\n  \"password\": \"123456\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json?.data?.accessToken) pm.environment.set('ProviderToken', json.data.accessToken);",
+              "if (json?.data?.user?.id) pm.environment.set('userId', json.data.user.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "login customer",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{api}}/api/auth/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"customer@gearup.com\",\n  \"password\": \"123456\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json?.data?.accessToken) pm.environment.set('CustomerToken', json.data.accessToken);",
+              "if (json?.data?.user?.id) pm.environment.set('userId', json.data.user.id);"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "get profile",
       "request": {
         "method": "GET",
         "header": [],
-        "url": {
-          "raw": "http://localhost:5001/api/auth/me",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "auth",
-            "me"
-          ]
-        },
+        "url": "{{api}}/api/auth/me",
         "auth": {
           "type": "bearer",
           "bearer": [
             {
               "key": "token",
-              "value": "{{Token}}",
+              "value": "{{CustomerToken}}",
               "type": "string"
             }
           ]
@@ -220,32 +156,14 @@
       "name": "update profile",
       "request": {
         "method": "PATCH",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "http://localhost:5001/api/auth/me",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "auth",
-            "me"
-          ]
-        },
+        "header": [],
+        "url": "{{api}}/api/auth/me",
         "auth": {
           "type": "bearer",
           "bearer": [
             {
               "key": "token",
-              "value": "{{Token}}",
+              "value": "{{CustomerToken}}",
               "type": "string"
             }
           ]

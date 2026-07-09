@@ -1,7 +1,6 @@
 {
   "info": {
-    "_postman_id": "1334ec90-7ed5-4295-96b2-e41b174734ae",
-    "name": "03 Categories",
+    "name": "categories",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -10,18 +9,7 @@
       "request": {
         "method": "GET",
         "header": [],
-        "url": {
-          "raw": "http://localhost:5001/api/categories",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "categories"
-          ]
-        }
+        "url": "{{api}}/api/categories"
       },
       "response": []
     },
@@ -29,25 +17,8 @@
       "name": "create category",
       "request": {
         "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "http://localhost:5001/api/categories",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "categories"
-          ]
-        },
+        "header": [],
+        "url": "{{api}}/api/categories",
         "auth": {
           "type": "bearer",
           "bearer": [
@@ -68,32 +39,26 @@
           }
         }
       },
-      "response": []
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json?.data?.id) pm.environment.set('categoryId', json.data.id);"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "update category",
       "request": {
         "method": "PATCH",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "http://localhost:5001/api/categories/{{categoryId}}",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "categories",
-            "{{categoryId}}"
-          ]
-        },
+        "header": [],
+        "url": "{{api}}/api/categories/{{categoryId}}",
         "auth": {
           "type": "bearer",
           "bearer": [
@@ -106,7 +71,7 @@
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"name\": \"Cycling & Bikes\",\n  \"description\": \"Bicycles, helmets, gloves, and cycling accessories\"\n}",
+          "raw": "{\n  \"name\": \"Cycling & Bikes\",\n  \"description\": \"Updated bicycles and cycling accessories\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -121,19 +86,7 @@
       "request": {
         "method": "DELETE",
         "header": [],
-        "url": {
-          "raw": "http://localhost:5001/api/categories/{{categoryId}}",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "categories",
-            "{{categoryId}}"
-          ]
-        },
+        "url": "{{api}}/api/categories/{{categoryId}}",
         "auth": {
           "type": "bearer",
           "bearer": [

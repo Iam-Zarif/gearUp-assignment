@@ -1,7 +1,6 @@
 {
   "info": {
-    "_postman_id": "b3884cc5-3f9f-4900-a264-1959f604de1e",
-    "name": "08 Payment",
+    "name": "payment",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -9,26 +8,8 @@
       "name": "create payment session",
       "request": {
         "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "http://localhost:5001/api/payments/create",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "payments",
-            "create"
-          ]
-        },
+        "header": [],
+        "url": "{{api}}/api/payments/create",
         "auth": {
           "type": "bearer",
           "bearer": [
@@ -49,32 +30,27 @@
           }
         }
       },
-      "response": []
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json?.data?.sessionId) pm.environment.set('sessionId', json.data.sessionId);",
+              "if (json?.data?.payment?.id) pm.environment.set('paymentId', json.data.payment.id);"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "confirm payment",
       "request": {
         "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "http://localhost:5001/api/payments/confirm",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "payments",
-            "confirm"
-          ]
-        },
+        "header": [],
+        "url": "{{api}}/api/payments/confirm",
         "auth": {
           "type": "bearer",
           "bearer": [
@@ -102,18 +78,7 @@
       "request": {
         "method": "GET",
         "header": [],
-        "url": {
-          "raw": "http://localhost:5001/api/payments",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "payments"
-          ]
-        },
+        "url": "{{api}}/api/payments",
         "auth": {
           "type": "bearer",
           "bearer": [
@@ -132,19 +97,7 @@
       "request": {
         "method": "GET",
         "header": [],
-        "url": {
-          "raw": "http://localhost:5001/api/payments/{{paymentId}}",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "payments",
-            "{{paymentId}}"
-          ]
-        },
+        "url": "{{api}}/api/payments/{{paymentId}}",
         "auth": {
           "type": "bearer",
           "bearer": [
@@ -163,19 +116,7 @@
       "request": {
         "method": "GET",
         "header": [],
-        "url": {
-          "raw": "http://localhost:5001/api/payments/success?session_id={{sessionId}}",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "payments",
-            "success?session_id={{sessionId}}"
-          ]
-        }
+        "url": "{{api}}/api/payments/success?session_id={{sessionId}}"
       },
       "response": []
     },
@@ -184,19 +125,7 @@
       "request": {
         "method": "GET",
         "header": [],
-        "url": {
-          "raw": "http://localhost:5001/api/payments/cancel",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "payments",
-            "cancel"
-          ]
-        }
+        "url": "{{api}}/api/payments/cancel"
       },
       "response": []
     }

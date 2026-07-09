@@ -1,7 +1,6 @@
 {
   "info": {
-    "_postman_id": "52531e6c-3199-4d02-8d37-42aabdfab942",
-    "name": "06 Rental",
+    "name": "rental",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -9,25 +8,8 @@
       "name": "create rental order",
       "request": {
         "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "http://localhost:5001/api/rentals",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "rentals"
-          ]
-        },
+        "header": [],
+        "url": "{{api}}/api/rentals",
         "auth": {
           "type": "bearer",
           "bearer": [
@@ -48,25 +30,26 @@
           }
         }
       },
-      "response": []
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json?.data?.id) pm.environment.set('rentalOrderId', json.data.id);"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "get my rental orders",
       "request": {
         "method": "GET",
         "header": [],
-        "url": {
-          "raw": "http://localhost:5001/api/rentals",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "rentals"
-          ]
-        },
+        "url": "{{api}}/api/rentals",
         "auth": {
           "type": "bearer",
           "bearer": [
@@ -85,19 +68,7 @@
       "request": {
         "method": "GET",
         "header": [],
-        "url": {
-          "raw": "http://localhost:5001/api/rentals/{{rentalOrderId}}",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5001",
-          "path": [
-            "api",
-            "rentals",
-            "{{rentalOrderId}}"
-          ]
-        },
+        "url": "{{api}}/api/rentals/{{rentalOrderId}}",
         "auth": {
           "type": "bearer",
           "bearer": [
