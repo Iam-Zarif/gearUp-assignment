@@ -10,7 +10,7 @@ Local API: http://localhost:5001
 GitHub Repo: https://github.com/Iam-Zarif/gearUp-assignment  
 ERD: https://drawsql.app/teams/webefo/diagrams/gearup/embed  
 Folder Structure: https://github.com/Iam-Zarif/gearUp-assignment/blob/main/folder_structure.md  
-Postman Collection: https://github.com/Iam-Zarif/gearUp-assignment/tree/main/postman
+Postman Collection: https://github.com/Iam-Zarif/gearUp-assignment/tree/main/postman   
 API Walkthrow: https://drive.google.com/file/d/1fUVNBNrIILGMPHD1qxDS7fR03mop30ip/view?usp=sharing
 
 ## Admin Credentials
@@ -51,7 +51,6 @@ All requests use dynamic environment variables:
 
 | Variable | Purpose |
 |---|---|
-| `api` | Base API URL |
 | `AdminToken` | Admin JWT token |
 | `ProviderToken` | Provider JWT token |
 | `CustomerToken` | Customer JWT token |
