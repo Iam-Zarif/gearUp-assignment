@@ -32,4 +32,10 @@ router.patch(
   AuthController.updateProfile
 );
 
+router.post(
+  "/logout",
+  auth(UserRole.CUSTOMER, UserRole.PROVIDER, UserRole.ADMIN),
+  AuthController.logoutUser
+);
+
 export const AuthRoutes = router;

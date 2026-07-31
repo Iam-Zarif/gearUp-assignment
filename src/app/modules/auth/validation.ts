@@ -92,6 +92,8 @@ const updateProfileValidationSchema = z.object({
     }),
 });
 
+
+
 export const AuthValidation = {
   registerValidationSchema,
   loginValidationSchema,

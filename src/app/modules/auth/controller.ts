@@ -54,9 +54,24 @@ const updateProfile = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const logoutUser = catchAsync(async (req: Request, res: Response) => {
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: false,
+  });
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "User logged out successfully",
+    data: null,
+  });
+});
+
 export const AuthController = {
   registerUser,
   loginUser,
   getMe,
-  updateProfile
+  updateProfile,
+  logoutUser
 };
