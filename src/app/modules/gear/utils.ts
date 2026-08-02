@@ -22,12 +22,26 @@ const buildGearWhereConditions = (
 
   if (searchTerm) {
     andConditions.push({
-      OR: gearSearchableFields.map((field) => ({
-        [field]: {
-          contains: searchTerm,
-          mode: "insensitive",
+      OR: [
+        {
+          name: {
+            startsWith: searchTerm,
+            mode: "insensitive",
+          },
         },
-      })) as Prisma.GearItemWhereInput[],
+        {
+          brand: {
+            startsWith: searchTerm,
+            mode: "insensitive",
+          },
+        },
+        {
+          description: {
+            contains: searchTerm,
+            mode: "insensitive",
+          },
+        },
+      ] as Prisma.GearItemWhereInput[],
     });
   }
 
@@ -119,8 +133,8 @@ const getPaginationOptions = (query: TGearQuery) => {
   const pageQuery = getQueryString(query.page);
   const limitQuery = getQueryString(query.limit);
 
-  const page = Number(pageQuery) || 1;
-  const limit = Number(limitQuery) || 10;
+  const page = Math.max(Number(pageQuery) || 1, 1);
+  const limit = Math.min(Math.max(Number(limitQuery) || 10, 1), 100);
   const skip = (page - 1) * limit;
 
   return {

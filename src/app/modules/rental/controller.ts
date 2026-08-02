@@ -48,13 +48,17 @@ const getSingleRental = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getProviderOrders = catchAsync(async (req: Request, res: Response) => {
-  const result = await RentalServices.getProviderOrders(req.user!.id);
+  const result = await RentalServices.getProviderOrders(
+    req.user!.id,
+    req.query as Record<string, unknown>
+  );
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: "Provider rental orders retrieved successfully",
-    data: result,
+    data: result.data,
+    meta: result.meta,
   });
 });
 

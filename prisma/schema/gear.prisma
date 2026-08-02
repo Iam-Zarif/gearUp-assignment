@@ -24,5 +24,7 @@ model GearItem {
   @@index([categoryId])
   @@index([brand])
   @@index([status])
+  @@index([name])
+  @@index([categoryId, status])
   @@map("gear_items")
 }

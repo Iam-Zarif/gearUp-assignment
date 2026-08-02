@@ -15,14 +15,17 @@ const getDashboardStats = catchAsync(async (_req: Request, res: Response) => {
   });
 });
 
-const getAllUsers = catchAsync(async (_req: Request, res: Response) => {
-  const result = await AdminServices.getAllUsers();
+const getAllUsers = catchAsync(async (req: Request, res: Response) => {
+  const result = await AdminServices.getAllUsers(
+    req.query as Record<string, unknown>
+  );
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: "Users retrieved successfully",
-    data: result,
+    data: result.data,
+    meta: result.meta,
   });
 });
 
@@ -47,47 +50,59 @@ const updateUserStatus = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getAllGear = catchAsync(async (_req: Request, res: Response) => {
-  const result = await AdminServices.getAllGear();
+const getAllGear = catchAsync(async (req: Request, res: Response) => {
+  const result = await AdminServices.getAllGear(
+    req.query as Record<string, unknown>
+  );
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: "Gear listings retrieved successfully",
-    data: result,
+    data: result.data,
+    meta: result.meta,
   });
 });
 
-const getAllRentals = catchAsync(async (_req: Request, res: Response) => {
-  const result = await AdminServices.getAllRentals();
+const getAllRentals = catchAsync(async (req: Request, res: Response) => {
+  const result = await AdminServices.getAllRentals(
+    req.query as Record<string, unknown>
+  );
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: "Rental orders retrieved successfully",
-    data: result,
+    data: result.data,
+    meta: result.meta,
   });
 });
 
-const getAllPayments = catchAsync(async (_req: Request, res: Response) => {
-  const result = await AdminServices.getAllPayments();
+const getAllPayments = catchAsync(async (req: Request, res: Response) => {
+  const result = await AdminServices.getAllPayments(
+    req.query as Record<string, unknown>
+  );
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: "Payments retrieved successfully",
-    data: result,
+    data: result.data,
+    meta: result.meta,
   });
 });
 
-const getAllReviews = catchAsync(async (_req: Request, res: Response) => {
-  const result = await AdminServices.getAllReviews();
+const getAllReviews = catchAsync(async (req: Request, res: Response) => {
+  const result = await AdminServices.getAllReviews(
+    req.query as Record<string, unknown>
+  );
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: "Reviews retrieved successfully",
-    data: result,
+    data: result.data,
+    meta: result.meta,
   });
 });
 

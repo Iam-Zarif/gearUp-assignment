@@ -18,13 +18,17 @@ const createReview = catchAsync(async (req: Request, res: Response) => {
 const getAllReviews = catchAsync(async (req: Request, res: Response) => {
   const gearItemId = req.query.gearItemId as string | undefined;
 
-  const result = await ReviewServices.getAllReviews(gearItemId);
+  const result = await ReviewServices.getAllReviews(
+    gearItemId,
+    req.query as Record<string, unknown>
+  );
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: "Reviews retrieved successfully",
-    data: result,
+    data: result.data,
+    meta: result.meta,
   });
 });
 

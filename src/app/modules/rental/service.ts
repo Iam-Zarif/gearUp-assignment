@@ -4,6 +4,13 @@ import { PaymentProvider, PaymentStatus } from "../../../generated/prisma/client
 import { TCreateRentalPayload, TUpdateRentalStatusPayload } from "./interface";
 import { rentalIncludeOptions, RentalUtils } from "./utils";
 
+const getPaginationOptions = (query: Record<string, unknown>) => {
+  const page = Math.max(Number(query.page) || 1, 1);
+  const limit = Math.min(Math.max(Number(query.limit) || 10, 1), 100);
+  const skip = (page - 1) * limit;
+
+  return { page, limit, skip };
+};
 
 const createRental = async (
   customerId: string,
@@ -41,8 +48,10 @@ const createRental = async (
 
   let totalAmount = 0;
 
+  const gearItemMap = new Map(gearItems.map((gear) => [gear.id, gear]));
+
   const orderItemsData = payload.items.map((item) => {
-    const gearItem = gearItems.find((gear) => gear.id === item.gearItemId);
+    const gearItem = gearItemMap.get(item.gearItemId);
 
     if (!gearItem) {
       throw new AppError(404, "Gear item not found");
@@ -155,22 +164,48 @@ const getSingleRental = async (id: string, userId: string) => {
   return result;
 };
 
-const getProviderOrders = async (providerId: string) => {
-  const result = await prisma.rentalOrder.findMany({
-    where: {
-      items: {
-        some: {
-          providerId,
+const getProviderOrders = async (
+  providerId: string,
+  query: Record<string, unknown>
+) => {
+  const { page, limit, skip } = getPaginationOptions(query);
+
+  const [data, total] = await Promise.all([
+    prisma.rentalOrder.findMany({
+      where: {
+        items: {
+          some: {
+            providerId,
+          },
         },
       },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: rentalIncludeOptions,
-  });
+      skip,
+      take: limit,
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: rentalIncludeOptions,
+    }),
+    prisma.rentalOrder.count({
+      where: {
+        items: {
+          some: {
+            providerId,
+          },
+        },
+      },
+    }),
+  ]);
 
-  return result;
+  return {
+    data,
+    meta: {
+      page,
+      limit,
+      total,
+      totalPage: Math.ceil(total / limit),
+    },
+  };
 };
 
 const updateProviderOrderStatus = async (

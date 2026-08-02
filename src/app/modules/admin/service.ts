@@ -9,6 +9,14 @@ import AppError from "../../errors/AppError";
 import { prisma } from "../../helpers/prisma";
 import { TUpdateUserStatusPayload } from "./interface";
 
+const getPaginationOptions = (query: Record<string, unknown>) => {
+  const page = Math.max(Number(query.page) || 1, 1);
+  const limit = Math.min(Math.max(Number(query.limit) || 10, 1), 100);
+  const skip = (page - 1) * limit;
+
+  return { page, limit, skip };
+};
+
 const userSelectOptions = {
   id: true,
   name: true,
@@ -22,15 +30,30 @@ const userSelectOptions = {
   updatedAt: true,
 } satisfies Prisma.UserSelect;
 
-const getAllUsers = async () => {
-  const result = await prisma.user.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-    select: userSelectOptions,
-  });
+const getAllUsers = async (query: Record<string, unknown> = {}) => {
+  const { page, limit, skip } = getPaginationOptions(query);
 
-  return result;
+  const [data, total] = await Promise.all([
+    prisma.user.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip,
+      take: limit,
+      select: userSelectOptions,
+    }),
+    prisma.user.count(),
+  ]);
+
+  return {
+    data,
+    meta: {
+      page,
+      limit,
+      total,
+      totalPage: Math.ceil(total / limit),
+    },
+  };
 };
 
 const getDashboardStats = async () => {
@@ -93,69 +116,133 @@ const updateUserStatus = async (
   return result;
 };
 
-const getAllGear = async () => {
-  const result = await prisma.gearItem.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: {
-      category: true,
-      provider: {
-        select: userSelectOptions,
-      },
-    },
-  });
+const getAllGear = async (query: Record<string, unknown> = {}) => {
+  const { page, limit, skip } = getPaginationOptions(query);
 
-  return result;
+  const [data, total] = await Promise.all([
+    prisma.gearItem.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip,
+      take: limit,
+      include: {
+        category: true,
+        provider: {
+          select: userSelectOptions,
+        },
+      },
+    }),
+    prisma.gearItem.count(),
+  ]);
+
+  return {
+    data,
+    meta: {
+      page,
+      limit,
+      total,
+      totalPage: Math.ceil(total / limit),
+    },
+  };
 };
 
-const getAllRentals = async () => {
-  const result = await prisma.rentalOrder.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: {
-      customer: {
-        select: userSelectOptions,
+const getAllRentals = async (query: Record<string, unknown> = {}) => {
+  const { page, limit, skip } = getPaginationOptions(query);
+
+  const [data, total] = await Promise.all([
+    prisma.rentalOrder.findMany({
+      orderBy: {
+        createdAt: "desc",
       },
-      items: {
-        include: {
-          gearItem: true,
-          provider: {
-            select: userSelectOptions,
+      skip,
+      take: limit,
+      include: {
+        customer: {
+          select: userSelectOptions,
+        },
+        items: {
+          include: {
+            gearItem: true,
+            provider: {
+              select: userSelectOptions,
+            },
+          },
+        },
+        payment: true,
+      },
+    }),
+    prisma.rentalOrder.count(),
+  ]);
+
+  return {
+    data,
+    meta: {
+      page,
+      limit,
+      total,
+      totalPage: Math.ceil(total / limit),
+    },
+  };
+};
+
+const getAllPayments = async (query: Record<string, unknown> = {}) => {
+  const { page, limit, skip } = getPaginationOptions(query);
+
+  const [data, total] = await Promise.all([
+    prisma.payment.findMany({
+      orderBy: { createdAt: "desc" },
+      skip,
+      take: limit,
+      include: {
+        customer: { select: userSelectOptions },
+        rentalOrder: true,
+      },
+    }),
+    prisma.payment.count(),
+  ]);
+
+  return {
+    data,
+    meta: {
+      page,
+      limit,
+      total,
+      totalPage: Math.ceil(total / limit),
+    },
+  };
+};
+
+const getAllReviews = async (query: Record<string, unknown> = {}) => {
+  const { page, limit, skip } = getPaginationOptions(query);
+
+  const [data, total] = await Promise.all([
+    prisma.review.findMany({
+      orderBy: { createdAt: "desc" },
+      skip,
+      take: limit,
+      include: {
+        customer: { select: userSelectOptions },
+        gearItem: {
+          select: {
+            id: true,
+            name: true,
           },
         },
       },
-      payment: true,
-    },
-  });
+    }),
+    prisma.review.count(),
+  ]);
 
-  return result;
-};
-
-const getAllPayments = async () => {
-  return prisma.payment.findMany({
-    orderBy: { createdAt: "desc" },
-    include: {
-      customer: { select: userSelectOptions },
-      rentalOrder: true,
+  return {
+    data,
+    meta: {
+      page,
+      limit,
+      total,
+      totalPage: Math.ceil(total / limit),
     },
-  });
-};
-
-const getAllReviews = async () => {
-  return prisma.review.findMany({
-    orderBy: { createdAt: "desc" },
-    include: {
-      customer: { select: userSelectOptions },
-      gearItem: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-    },
-  });
+  };
 };
 
 export const AdminServices = {
