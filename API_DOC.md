@@ -21,6 +21,8 @@ Base path: `/api`
 - The backend defaults to `page=1` and `limit=10` when omitted.
 - The backend clamps `limit` to a maximum of `100`.
 - Frontend must read `meta.limit` and `meta.totalPage` from the response and use them to keep UI controls synced.
+- For the standard app contract, use `limit=10` for list pages unless the frontend intentionally requests another value.
+- If the frontend sends `limit=10`, the backend response must return `meta.limit = 10` exactly.
 - Protected endpoints require authentication via either:
   - `Authorization: Bearer <accessToken>` header
   - or cookie `accessToken`
@@ -159,6 +161,7 @@ Base path: `/api`
     - allowed: `asc`, `desc`
 - Response data: paginated list of gear items
 - Important: use returned `meta.limit` and `meta.totalPage`
+
 
 ### GET `/api/gear/:id`
 
