@@ -7,6 +7,8 @@ import { AdminValidation } from "./validation";
 
 const router = Router();
 
+router.get("/stats", auth(UserRole.ADMIN), AdminController.getDashboardStats);
+
 router.get("/users", auth(UserRole.ADMIN), AdminController.getAllUsers);
 
 router.patch(
@@ -19,5 +21,9 @@ router.patch(
 router.get("/gear", auth(UserRole.ADMIN), AdminController.getAllGear);
 
 router.get("/rentals", auth(UserRole.ADMIN), AdminController.getAllRentals);
+
+router.get("/payments", auth(UserRole.ADMIN), AdminController.getAllPayments);
+
+router.get("/reviews", auth(UserRole.ADMIN), AdminController.getAllReviews);
 
 export const AdminRoutes = router;

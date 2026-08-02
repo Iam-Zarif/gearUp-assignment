@@ -1,5 +1,6 @@
 import { prisma } from "../../helpers/prisma";
 import AppError from "../../errors/AppError";
+import { PaymentProvider, PaymentStatus } from "../../../generated/prisma/client";
 import { TCreateRentalPayload, TUpdateRentalStatusPayload } from "./interface";
 import { rentalIncludeOptions, RentalUtils } from "./utils";
 
@@ -64,6 +65,27 @@ const createRental = async (
   });
 
   const result = await prisma.$transaction(async (transactionClient) => {
+    for (const item of orderItemsData) {
+      const reservation = await transactionClient.gearItem.updateMany({
+        where: {
+          id: item.gearItemId,
+          status: "AVAILABLE",
+          availableQuantity: {
+            gte: item.quantity,
+          },
+        },
+        data: {
+          availableQuantity: {
+            decrement: item.quantity,
+          },
+        },
+      });
+
+      if (reservation.count !== 1) {
+        throw new AppError(409, "This equipment is no longer available in the requested quantity");
+      }
+    }
+
     const rentalOrder = await transactionClient.rentalOrder.create({
       data: {
         customerId,
@@ -73,22 +95,17 @@ const createRental = async (
         items: {
           create: orderItemsData,
         },
+        payment: {
+          create: {
+            customerId,
+            amount: totalAmount,
+            provider: PaymentProvider.STRIPE,
+            status: PaymentStatus.PENDING,
+          },
+        },
       },
       include: rentalIncludeOptions,
     });
-
-    for (const item of payload.items) {
-      await transactionClient.gearItem.update({
-        where: {
-          id: item.gearItemId,
-        },
-        data: {
-          availableQuantity: {
-            decrement: item.quantity,
-          },
-        },
-      });
-    }
 
     return rentalOrder;
   });
@@ -96,18 +113,24 @@ const createRental = async (
   return result;
 };
 
-const getMyRentals = async (customerId: string) => {
-  const result = await prisma.rentalOrder.findMany({
-    where: {
-      customerId,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: rentalIncludeOptions,
-  });
+const getMyRentals = async (customerId: string, query: Record<string, unknown>) => {
+  const page = Math.max(Number(query.page) || 1, 1);
+  const limit = Math.min(Math.max(Number(query.limit) || 10, 1), 100);
+  const where = { customerId };
+  const [data, total] = await Promise.all([
+    prisma.rentalOrder.findMany({
+      where,
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: rentalIncludeOptions,
+    }),
+    prisma.rentalOrder.count({ where }),
+  ]);
 
-  return result;
+  return { data, meta: { page, limit, total, totalPage: Math.ceil(total / limit) } };
 };
 
 const getSingleRental = async (id: string, userId: string) => {
@@ -180,18 +203,30 @@ const updateProviderOrderStatus = async (
 
   RentalUtils.validateProviderStatusTransition(rentalOrder.status, nextStatus);
 
+  if (
+    nextStatus === "RETURNED" &&
+    new Date(rentalOrder.endDate).setHours(0, 0, 0, 0) >
+      new Date().setHours(0, 0, 0, 0)
+  ) {
+    throw new AppError(400, "Equipment can be marked returned on or after the rental end date");
+  }
+
   const itemStatus = RentalUtils.mapRentalStatusToItemStatus(nextStatus);
 
   const result = await prisma.$transaction(async (transactionClient) => {
-    const updatedOrder = await transactionClient.rentalOrder.update({
+    const statusUpdate = await transactionClient.rentalOrder.updateMany({
       where: {
         id,
+        status: rentalOrder.status,
       },
       data: {
         status: nextStatus,
       },
-      include: rentalIncludeOptions,
     });
+
+    if (statusUpdate.count !== 1) {
+      throw new AppError(409, "This rental order was updated by another request. Refresh and try again");
+    }
 
     await transactionClient.rentalOrderItem.updateMany({
       where: {
@@ -204,7 +239,7 @@ const updateProviderOrderStatus = async (
     });
 
     if (nextStatus === "CANCELLED" || nextStatus === "RETURNED") {
-      for (const item of rentalOrder.items) {
+      for (const item of rentalOrder.items.filter((item) => item.providerId === providerId)) {
         await transactionClient.gearItem.update({
           where: {
             id: item.gearItemId,
@@ -218,7 +253,10 @@ const updateProviderOrderStatus = async (
       }
     }
 
-    return updatedOrder;
+    return transactionClient.rentalOrder.findUniqueOrThrow({
+      where: { id },
+      include: rentalIncludeOptions,
+    });
   });
 
   return result;

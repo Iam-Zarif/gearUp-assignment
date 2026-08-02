@@ -14,79 +14,102 @@ const createPaymentSession = async (
   customerId: string,
   payload: TCreatePaymentPayload
 ) => {
-  const rentalOrder = await prisma.rentalOrder.findUnique({
-    where: {
-      id: payload.rentalOrderId,
-    },
-    include: {
-      customer: true,
-      payment: true,
-    },
-  });
+  return prisma.$transaction(async (transactionClient) => {
+    await transactionClient.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`payment:${payload.rentalOrderId}`}))`;
 
-  if (!rentalOrder) {
-    throw new AppError(404, "Rental order not found");
-  }
-
-  const amount = PaymentUtils.validateRentalOrderForPayment(
-    rentalOrder,
-    customerId
-  );
-
-  const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["card"],
-    mode: "payment",
-    customer_email: rentalOrder.customer.email,
-    line_items: [
-      {
-        price_data: {
-          currency: STRIPE_CURRENCY,
-          product_data: {
-            name: "GearUp Rental Order",
-            description: `Rental order id: ${rentalOrder.id}`,
-          },
-          unit_amount: Math.round(amount * 100),
-        },
-        quantity: 1,
+    const rentalOrder = await transactionClient.rentalOrder.findUnique({
+      where: {
+        id: payload.rentalOrderId,
       },
-    ],
-    metadata: {
-      rentalOrderId: rentalOrder.id,
-      customerId,
-    },
-    success_url: `${config.stripe.success_url}?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: config.stripe.cancel_url,
-  });
+      include: {
+        customer: true,
+        payment: true,
+      },
+    });
 
-  const payment = await prisma.payment.upsert({
-    where: {
-      rentalOrderId: rentalOrder.id,
-    },
-    update: {
+    if (!rentalOrder) {
+      throw new AppError(404, "Rental order not found");
+    }
+
+    const amount = PaymentUtils.validateRentalOrderForPayment(
+      rentalOrder,
+      customerId
+    );
+
+    if (rentalOrder.payment?.transactionId) {
+      const existingSession = await stripe.checkout.sessions.retrieve(
+        rentalOrder.payment.transactionId
+      );
+
+      if (existingSession.status === "open" && existingSession.url) {
+        const payment = await transactionClient.payment.findUniqueOrThrow({
+          where: { id: rentalOrder.payment.id },
+          include: paymentIncludeOptions,
+        });
+
+        return {
+          payment,
+          sessionId: existingSession.id,
+          checkoutUrl: existingSession.url,
+        };
+      }
+    }
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      mode: "payment",
+      customer_email: rentalOrder.customer.email,
+      line_items: [
+        {
+          price_data: {
+            currency: STRIPE_CURRENCY,
+            product_data: {
+              name: "GearUp Rental Order",
+              description: `Rental order id: ${rentalOrder.id}`,
+            },
+            unit_amount: Math.round(amount * 100),
+          },
+          quantity: 1,
+        },
+      ],
+      metadata: {
+        rentalOrderId: rentalOrder.id,
+        customerId,
+      },
+      success_url: `${config.stripe.success_url}?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: config.stripe.cancel_url,
+    });
+
+    const paymentData = {
       transactionId: session.id,
       amount,
       provider: PaymentProvider.STRIPE,
       method: STRIPE_PAYMENT_METHOD,
       status: PaymentStatus.PENDING,
       paidAt: null,
-    },
-    create: {
-      rentalOrderId: rentalOrder.id,
-      customerId,
-      transactionId: session.id,
-      amount,
-      provider: PaymentProvider.STRIPE,
-      method: STRIPE_PAYMENT_METHOD,
-      status: PaymentStatus.PENDING,
-    },
-    include: paymentIncludeOptions,
-  });
+    };
 
-  return {
-    payment,
-    sessionId: session.id,
-    checkoutUrl: session.url,
-  };
+    const payment = rentalOrder.payment
+      ? await transactionClient.payment.update({
+          where: { id: rentalOrder.payment.id },
+          data: paymentData,
+          include: paymentIncludeOptions,
+        })
+      : await transactionClient.payment.create({
+          data: {
+            rentalOrderId: rentalOrder.id,
+            customerId,
+            ...paymentData,
+          },
+          include: paymentIncludeOptions,
+        });
+
+    return {
+      payment,
+      sessionId: session.id,
+      checkoutUrl: session.url,
+    };
+  }, { timeout: 15000 });
 };
 
 const confirmPayment = async (
@@ -130,18 +153,24 @@ const confirmPayment = async (
   return result;
 };
 
-const getMyPayments = async (customerId: string) => {
-  const result = await prisma.payment.findMany({
-    where: {
-      customerId,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: paymentIncludeOptions,
-  });
+const getMyPayments = async (customerId: string, query: Record<string, unknown>) => {
+  const page = Math.max(Number(query.page) || 1, 1);
+  const limit = Math.min(Math.max(Number(query.limit) || 10, 1), 100);
+  const where = { customerId };
+  const [data, total] = await Promise.all([
+    prisma.payment.findMany({
+      where,
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: paymentIncludeOptions,
+    }),
+    prisma.payment.count({ where }),
+  ]);
 
-  return result;
+  return { data, meta: { page, limit, total, totalPage: Math.ceil(total / limit) } };
 };
 
 const getSinglePayment = async (id: string, customerId: string) => {

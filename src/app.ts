@@ -5,6 +5,7 @@ import router from "./app/routes/index";
 import globalErrorHandler from "./app/middlewares/globalErrorHandler";
 import notFound from "./app/middlewares/notFound";
 import { RootRoute } from "./app/routes/root";
+import { PaymentController } from "./app/modules/payment/controller";
 
 const app: Application = express();
 
@@ -18,6 +19,11 @@ app.use(
 );
 
 app.use(cookieParser());
+app.post(
+  "/api/payments/webhook",
+  express.raw({ type: "application/json" }),
+  PaymentController.handleStripeWebhook
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
+import config from "../../config";
 import AppError from "../../errors/AppError";
 import catchAsync from "../../helpers/catchAsync";
 import sendResponse from "../../helpers/sendResponse";
+import { stripe } from "../../helpers/stripe";
 import { PaymentServices } from "./service";
 
 const createPaymentSession = catchAsync(
@@ -32,13 +34,17 @@ const confirmPayment = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getMyPayments = catchAsync(async (req: Request, res: Response) => {
-  const result = await PaymentServices.getMyPayments(req.user!.id);
+  const result = await PaymentServices.getMyPayments(
+    req.user!.id,
+    req.query as Record<string, unknown>
+  );
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: "Payment history retrieved successfully",
-    data: result,
+    data: result.data,
+    meta: result.meta,
   });
 });
 
@@ -87,6 +93,29 @@ const handleCancelPayment = catchAsync(async (_req: Request, res: Response) => {
   });
 });
 
+const handleStripeWebhook = catchAsync(async (req: Request, res: Response) => {
+  const signature = req.headers["stripe-signature"];
+
+  if (!signature || Array.isArray(signature)) {
+    throw new AppError(400, "Stripe signature is required");
+  }
+
+  const event = stripe.webhooks.constructEvent(
+    req.body,
+    signature,
+    config.stripe.webhook_secret
+  );
+
+  if (
+    event.type === "checkout.session.completed" ||
+    event.type === "checkout.session.async_payment_succeeded"
+  ) {
+    await PaymentServices.handleSuccessPayment(event.data.object.id);
+  }
+
+  res.status(200).json({ received: true });
+});
+
 export const PaymentController = {
   createPaymentSession,
   confirmPayment,
@@ -94,4 +123,5 @@ export const PaymentController = {
   getSinglePayment,
   handleSuccessPayment,
   handleCancelPayment,
+  handleStripeWebhook,
 };

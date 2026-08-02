@@ -19,41 +19,12 @@ const main = async () => {
       email: config.admin.email,
       password: hashedPassword,
       role: UserRole.ADMIN,
-      phone: "01700000000",
+      phone: "01933329902",
       address: "Dhaka, Bangladesh",
     },
   });
 
-  const categories = [
-    {
-      name: "Cycling",
-      description: "Bikes, helmets, and cycling accessories",
-    },
-    {
-      name: "Camping",
-      description: "Tents, backpacks, sleeping bags, and camping tools",
-    },
-    {
-      name: "Fitness",
-      description: "Gym, workout, and training equipment",
-    },
-    {
-      name: "Water Sports",
-      description: "Outdoor water sports rental equipment",
-    },
-  ];
 
-  for (const category of categories) {
-    await prisma.category.upsert({
-      where: {
-        name: category.name,
-      },
-      update: {},
-      create: category,
-    });
-  }
-
-  console.log("Admin user and initial categories seeded successfully");
 };
 
 main()

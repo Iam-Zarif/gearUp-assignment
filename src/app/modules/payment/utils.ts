@@ -74,27 +74,44 @@ const markPaymentAsCompleted = async (
   rentalOrderId: string
 ) => {
   const result = await prisma.$transaction(async (transactionClient) => {
-    const updatedPayment = await transactionClient.payment.update({
+    const paymentUpdate = await transactionClient.payment.updateMany({
       where: {
         id: paymentId,
+        status: PaymentStatus.PENDING,
       },
       data: {
         status: PaymentStatus.COMPLETED,
         paidAt: new Date(),
       },
-      include: paymentIncludeOptions,
     });
 
-    await transactionClient.rentalOrder.update({
+    if (paymentUpdate.count === 0) {
+      return transactionClient.payment.findUniqueOrThrow({
+        where: { id: paymentId },
+        include: paymentIncludeOptions,
+      });
+    }
+
+    const rentalUpdate = await transactionClient.rentalOrder.updateMany({
       where: {
         id: rentalOrderId,
+        status: {
+          in: [RentalStatus.PLACED, RentalStatus.CONFIRMED],
+        },
       },
       data: {
         status: RentalStatus.PAID,
       },
     });
 
-    return updatedPayment;
+    if (rentalUpdate.count !== 1) {
+      throw new AppError(409, "Rental order can no longer be marked as paid");
+    }
+
+    return transactionClient.payment.findUniqueOrThrow({
+      where: { id: paymentId },
+      include: paymentIncludeOptions,
+    });
   });
 
   return result;

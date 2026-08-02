@@ -27,6 +27,21 @@ const getAllGear = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getMyGear = catchAsync(async (req: Request, res: Response) => {
+  const result = await GearServices.getMyGear(
+    req.user!.id,
+    req.query as Record<string, unknown>
+  );
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Provider gear items retrieved successfully",
+    data: result.data,
+    meta: result.meta,
+  });
+});
+
 const getSingleGear = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
 
@@ -81,6 +96,7 @@ const deleteGear = catchAsync(async (req: Request, res: Response) => {
 export const GearController = {
   createGear,
   getAllGear,
+  getMyGear,
   getSingleGear,
   updateGear,
   deleteGear,

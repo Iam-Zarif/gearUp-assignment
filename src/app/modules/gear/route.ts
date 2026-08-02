@@ -18,6 +18,12 @@ providerGearRouter.post(
   GearController.createGear
 );
 
+providerGearRouter.get(
+  "/",
+  auth(UserRole.PROVIDER),
+  GearController.getMyGear
+);
+
 providerGearRouter.put(
   "/:id",
   auth(UserRole.PROVIDER),

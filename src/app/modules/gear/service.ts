@@ -76,6 +76,24 @@ const getAllGear = async (query: TGearQuery) => {
   };
 };
 
+const getMyGear = async (providerId: string, query: Record<string, unknown>) => {
+  const page = Math.max(Number(query.page) || 1, 1);
+  const limit = Math.min(Math.max(Number(query.limit) || 10, 1), 100);
+  const where = { providerId };
+  const [data, total] = await Promise.all([
+    prisma.gearItem.findMany({
+      where,
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: { createdAt: "desc" },
+      include: gearIncludeOptions,
+    }),
+    prisma.gearItem.count({ where }),
+  ]);
+
+  return { data, meta: { page, limit, total, totalPage: Math.ceil(total / limit) } };
+};
+
 const getSingleGear = async (id: string) => {
   const result = await prisma.gearItem.findUnique({
     where: {
@@ -187,6 +205,7 @@ const deleteGear = async (id: string, providerId: string) => {
 export const GearServices = {
   createGear,
   getAllGear,
+  getMyGear,
   getSingleGear,
   updateGear,
   deleteGear,

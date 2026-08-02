@@ -1,4 +1,10 @@
-import { Prisma, UserStatus } from "../../../generated/prisma/client";
+import {
+  GearStatus,
+  PaymentStatus,
+  Prisma,
+  UserRole,
+  UserStatus,
+} from "../../../generated/prisma/client";
 import AppError from "../../errors/AppError";
 import { prisma } from "../../helpers/prisma";
 import { TUpdateUserStatusPayload } from "./interface";
@@ -25,6 +31,34 @@ const getAllUsers = async () => {
   });
 
   return result;
+};
+
+const getDashboardStats = async () => {
+  const [users, providers, customers, categories, gear, activeGear, rentals, completedPayments] =
+    await Promise.all([
+      prisma.user.count(),
+      prisma.user.count({ where: { role: UserRole.PROVIDER } }),
+      prisma.user.count({ where: { role: UserRole.CUSTOMER } }),
+      prisma.category.count(),
+      prisma.gearItem.count(),
+      prisma.gearItem.count({ where: { status: GearStatus.AVAILABLE } }),
+      prisma.rentalOrder.count(),
+      prisma.payment.aggregate({
+        where: { status: PaymentStatus.COMPLETED },
+        _sum: { amount: true },
+      }),
+    ]);
+
+  return {
+    users,
+    providers,
+    customers,
+    categories,
+    gear,
+    activeGear,
+    rentals,
+    revenue: completedPayments._sum.amount?.toString() ?? "0",
+  };
 };
 
 const updateUserStatus = async (
@@ -99,9 +133,37 @@ const getAllRentals = async () => {
   return result;
 };
 
+const getAllPayments = async () => {
+  return prisma.payment.findMany({
+    orderBy: { createdAt: "desc" },
+    include: {
+      customer: { select: userSelectOptions },
+      rentalOrder: true,
+    },
+  });
+};
+
+const getAllReviews = async () => {
+  return prisma.review.findMany({
+    orderBy: { createdAt: "desc" },
+    include: {
+      customer: { select: userSelectOptions },
+      gearItem: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  });
+};
+
 export const AdminServices = {
+  getDashboardStats,
   getAllUsers,
   updateUserStatus,
   getAllGear,
   getAllRentals,
+  getAllPayments,
+  getAllReviews,
 };

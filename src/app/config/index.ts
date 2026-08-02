@@ -19,8 +19,10 @@ const config = {
   stripe: {
     secret_key: process.env.STRIPE_SECRET_KEY as string,
     webhook_secret: process.env.STRIPE_WEBHOOK_SECRET as string,
-    success_url: process.env.CLIENT_SUCCESS_URL as string,
-    cancel_url: process.env.CLIENT_CANCEL_URL as string,
+    success_url:
+      process.env.CLIENT_SUCCESS_URL || "http://localhost:3000/payment/success",
+    cancel_url:
+      process.env.CLIENT_CANCEL_URL || "http://localhost:3000/payment/cancel",
   },
 
   admin: {
